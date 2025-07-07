@@ -1,0 +1,18 @@
+- name: Setup Flask and Docker
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Run Flask Docker container
+      docker_container:
+        name: flask-app
+        image: flask-app:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "5000:5000"

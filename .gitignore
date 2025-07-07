@@ -1,0 +1,49 @@
+# Python
+*.pyc
+__pycache__/
+.env
+.venv/
+venv/
+*.log
+
+# Pip
+requirements.txt
+
+# Docker
+*.tar
+*.pid
+*.img
+
+# Docker Compose override or sensitive env
+docker-compose.override.yml
+.env.docker
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+.terraform.lock.hcl
+
+# Ansible
+*.retry
+*.vault
+host_vars/
+group_vars/
+
+# SSH keys and credentials
+*.pem
+*.key
+*.pub
+id_rsa*
+key.json
+inventory.ini  # содержит IP или хосты — лучше не коммитить
+
+# VS Code / PyCharm / macOS
+.vscode/
+.idea/
+.DS_Store
+
+# Jenkins local secrets
+secrets/
+init.groovy.d/
