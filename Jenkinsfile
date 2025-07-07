@@ -7,13 +7,14 @@ pipeline {
     REMOTE_USER = 'devops'                // Укажи своего SSH-пользователя
   }
 
+  stages {
     stage('Build Docker Image') {
       steps {
         dir('app') {
           sh '''
             docker buildx create --use || true
             docker buildx build --platform linux/amd64 -t $DOCKER_IMAGE --load .
-          '''
+           '''
         }
       }
     }
