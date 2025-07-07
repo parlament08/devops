@@ -6,9 +6,6 @@ __pycache__/
 venv/
 *.log
 
-# Pip
-requirements.txt
-
 # Docker
 *.tar
 *.pid
