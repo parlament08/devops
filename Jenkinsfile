@@ -25,7 +25,7 @@ pipeline {
           sh """
             docker save $DOCKER_IMAGE | bzip2 | ssh ${REMOTE_USER}@${REMOTE_HOST} 'bunzip2 | docker load'
             ssh ${REMOTE_USER}@${REMOTE_HOST} 'docker stop flask-app || true && docker rm flask-app || true'
-            ssh ${REMOTE_USER}@${REMOTE_HOST} 'docker run -d -p 5050:5000 --name flask-app $DOCKER_IMAGE'
+            ssh ${REMOTE_USER}@${REMOTE_HOST} 'docker run -d -p 5050:5050 --name flask-app $DOCKER_IMAGE'
           """
         }
       }
