@@ -1,6 +1,7 @@
 pipeline {
   agent any
 
+
   environment {
     DOCKER_IMAGE = 'flask-app:latest'
     REMOTE_HOST = '34.57.209.87'          // Укажи IP своей VM
