@@ -12,10 +12,12 @@ resource "google_compute_firewall" "allow-ssh-http" {
 
   allow {
     protocol = "tcp"
-    ports = ["22", "80", "443"]
+    ports = ["22", "80", "443", "3000", "5050", "9090", "9100"]
   }
 
   source_ranges = ["0.0.0.0/0"]
+  direction     = "INGRESS"
+  target_tags   = ["devops", "allow5050"]
 }
 
 data "google_compute_image" "ubuntu" {
@@ -42,5 +44,5 @@ resource "google_compute_instance" "default" {
     ssh-keys = "devops:${file(var.public_key_path)}"
   }
 
-  tags = ["http-server", "https-server"]
+  tags = ["http-server", "https-server", "allow5050", "devops"]
 }

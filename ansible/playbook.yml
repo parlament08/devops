@@ -1,18 +1,99 @@
-- name: Setup Flask and Docker
-  hosts: all
-  become: yes
-  tasks:
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
-        update_cache: true
+- name: Настроить DevOps VM
+  hosts: devops
+  become: true
 
-    - name: Run Flask Docker container
+  tasks:
+    - name: Обновить apt
+      apt:
+        update_cache: yes
+
+    - name: Установить зависимости
+      apt:
+        name:
+          - docker.io
+          - python3-pip
+          - git
+        state: present
+
+    - name: Добавить пользователя devops в группу docker
+      ansible.builtin.user:
+        name: devops
+        groups: docker
+        append: yes
+
+    - name: Убедиться, что Docker работает
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Создать Docker-сеть monitoring
+      docker_network:
+        name: monitoring
+        state: present
+
+    - name: Запустить Grafana в Docker
       docker_container:
-        name: flask-app
-        image: flask-app:latest
+        name: grafana
+        image: grafana/grafana-oss:latest
         state: started
         restart_policy: always
-        published_ports:
-          - "5000:5000"
+        ports:
+          - "3000:3000"
+        networks:
+          - name: monitoring
+
+    - name: Запустить Prometheus в Docker
+      docker_container:
+        name: prometheus
+        image: prom/prometheus
+        state: started
+        restart_policy: always
+        ports:
+          - "9090:9090"
+        volumes:
+          - /opt/prometheus:/etc/prometheus
+        networks:
+          - name: monitoring
+
+    - name: Копировать prometheus.yml
+      copy:
+        src: files/prometheus.yml
+        dest: /opt/prometheus/prometheus.yml
+
+    - name: Добавить Prometheus как источник данных в Grafana
+      community.grafana.grafana_datasource:
+        name: Prometheus
+        ds_type: prometheus
+        ds_url: "http://{{ grafana_host_ip }}:9090"
+        access: proxy
+        is_default: true
+        state: present
+        grafana_url: "http://{{ grafana_host_ip }}:3000"
+        grafana_user: admin
+        grafana_password: admin
+
+    - name: Запустить Node Exporter в Docker
+      docker_container:
+        name: node_exporter
+        image: prom/node-exporter
+        state: started
+        restart_policy: always
+        ports:
+          - "9100:9100"
+        networks:
+          - name: monitoring
+
+    - name: Скопировать файл дашборда на удалённую VM
+      copy:
+        src: files/sample-dashboard.json
+        dest: /tmp/sample-dashboard.json
+
+    - name: Добавить Node Exporter Full Dashboard в Grafana
+      community.grafana.grafana_dashboard:
+        grafana_url: "http://{{ grafana_host_ip }}:3000"
+        grafana_user: admin
+        grafana_password: admin
+        path: /tmp/sample-dashboard.json
+        state: present
+        overwrite: true
