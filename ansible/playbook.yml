@@ -65,11 +65,11 @@
       community.grafana.grafana_datasource:
         name: Prometheus
         ds_type: prometheus
-        ds_url: "http://{{ grafana_host_ip }}:9090"
+        ds_url: "http://{{ host_ip }}:9090"
         access: proxy
         is_default: true
         state: present
-        grafana_url: "http://{{ grafana_host_ip }}:3000"
+        grafana_url: "http://{{ host_ip }}:3000"
         grafana_user: admin
         grafana_password: admin
 
@@ -91,7 +91,7 @@
 
     - name: Добавить Node Exporter Full Dashboard в Grafana
       community.grafana.grafana_dashboard:
-        grafana_url: "http://{{ grafana_host_ip }}:3000"
+        grafana_url: "http://{{ host_ip }}:3000"
         grafana_user: admin
         grafana_password: admin
         path: /tmp/sample-dashboard.json

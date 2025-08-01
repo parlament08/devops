@@ -27,6 +27,6 @@ echo "Ожидание запуска VM (30 секунд)..."
 sleep 30
 
 echo "Запускаем Ansible Playbook..."
-ansible-playbook -i inventory.ini ansible/playbook.yml --extra-vars "grafana_host_ip=$IP"
+ansible-playbook -i inventory.ini ansible/playbook.yml --extra-vars "host_ip=$IP"
 
-echo "Готово! Сервер $IP настроен и готов к деплою 🚀"
+echo "Готово! Сервер $IP настроен и готов к деплою"
