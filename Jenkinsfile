@@ -4,7 +4,7 @@ pipeline {
 
   environment {
     DOCKER_IMAGE = 'flask-app:latest'
-    REMOTE_HOST = '34.27.129.227'          // Укажи IP своей VM
+    REMOTE_HOST = '34.41.189.31'          // Укажи IP своей VM
     REMOTE_USER = 'devops'                // Укажи своего SSH-пользователя
   }
 
