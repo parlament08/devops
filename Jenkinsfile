@@ -4,8 +4,8 @@ pipeline {
 
   environment {
     DOCKER_IMAGE = 'flask-app:latest'
-    REMOTE_HOST = '34.41.189.31'          // Укажи IP своей VM
-    REMOTE_USER = 'devops'                // Укажи своего SSH-пользователя
+    REMOTE_HOST = '34.60.47.20'
+    REMOTE_USER = 'devops'
   }
 
   stages {
@@ -22,7 +22,7 @@ pipeline {
 
     stage('Deploy via SSH') {
       steps {
-        sshagent(credentials: ['vm-ssh-key']) { // 'vm-ssh-key' — ID SSH-ключа в Jenkins Credentials
+        sshagent(credentials: ['vm-ssh-key']) { // 'vm-ssh-key' — ID SSH-key in Jenkins Credentials
           sh """
             docker save $DOCKER_IMAGE | bzip2 | ssh ${REMOTE_USER}@${REMOTE_HOST} 'bunzip2 | docker load'
             ssh ${REMOTE_USER}@${REMOTE_HOST} 'docker stop flask-app || true && docker rm flask-app || true'

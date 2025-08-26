@@ -1,36 +1,37 @@
-# DevOps-проект: Автоматизация деплоя Flask + мониторинг с Grafana
+# DevOps Project: Automating Flask Deployment + Monitoring with Grafana
 
-## 📌 Цель проекта
+## Project Goal
 
-Полностью автоматизировать деплой Flask-приложения на Google Cloud VM с помощью:
+Fully automate the deployment of a Flask application on a Google Cloud VM using:
 
-- Terraform (создание инфраструктуры)
-- Ansible (настройка сервера и Docker)
-- Jenkins (CI/CD по коммиту в GitHub)
-- Prometheus + Grafana (сбор метрик и мониторинг)
-
----
-
-## ⚙️ Технологии
-
-| Компонент     | Назначение                        |
-|---------------|-----------------------------------|
-| Terraform     | Создание VM, firewall, SSH        |
-| Ansible       | Установка Docker, запуск сервисов |
-| Jenkins       | CI/CD pipeline                    |
-| Docker        | Flask-приложение, Prometheus, Grafana |
-| Prometheus    | Сбор системных метрик             |
-| Grafana       | Визуализация метрик               |
+- Terraform (infrastructure creation)
+- Ansible (server and Docker setup)
+- Jenkins (CI/CD triggered by GitHub commits)
+- Prometheus + Grafana (metrics collection and monitoring)
 
 ---
 
-## 📁 Структура проекта
+## Technologies
+
+| Component  | Purpose                                 |
+|------------|-----------------------------------------|
+| Terraform  | Create VM, firewall, SSH                |
+| Ansible    | Install Docker, launch services         |
+| Jenkins    | CI/CD pipeline                          |
+| Docker     | Flask application, Prometheus, Grafana  |
+| Prometheus | Collect system metrics                  |
+| Grafana    | Visualize metrics                       |
+
+---
+
+## Project Structure
 
 ```plaintext
 .
-├── app/                       # Flask-приложение
+├── app/                       # Flask-application
 │   ├── app.py
-│   └── Dockerfile
+│   ├── Dockerfile
+│   └── requirements.txt
 ├── ansible/
 │   ├── playbook.yml
 │   └── files/
@@ -40,23 +41,23 @@
 │   ├── main.tf
 │   ├── variables.tf
 │   └── terraform.tfvars
-├── inventory.ini             # Генерируется автоматически
+├── inventory.ini             # Generated automatically
 ├── Jenkinsfile               # CI/CD pipeline
-├── setup.sh                  # Автоматизация запуска
+├── setup.sh                  # automation of startup
 └── README.md
 ```
 
 
 ---
 
-## 🚀 Быстрый старт
+## Quick Start
 
-### 1. Подготовка
+### 1. Prepare
 
-- Установи: `Terraform`, `Ansible`, `Docker`, `Jenkins`
-- Убедись, что у тебя есть SSH-ключ и доступ к GCP
+- Install: `Terraform`, `Ansible`, `Docker`, `Jenkins`
+- Make sure you have an SSH key and access to GCP
 
-### 2. Запуск
+### 2. Start
 
 ```bash
 chmod +x setup.sh

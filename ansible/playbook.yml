@@ -1,13 +1,13 @@
-- name: Настроить DevOps VM
+- name: Configure DevOps VM
   hosts: devops
   become: true
 
   tasks:
-    - name: Обновить apt
+    - name: Update apt
       apt:
         update_cache: yes
 
-    - name: Установить зависимости
+    - name: Install dependencies
       apt:
         name:
           - docker.io
@@ -15,24 +15,24 @@
           - git
         state: present
 
-    - name: Добавить пользователя devops в группу docker
+    - name: Add a user to the docker group
       ansible.builtin.user:
         name: devops
         groups: docker
         append: yes
 
-    - name: Убедиться, что Docker работает
+    - name: Ensure Docker is running
       service:
         name: docker
         state: started
         enabled: true
 
-    - name: Создать Docker-сеть monitoring
+    - name: Create a Docker network named monitoring
       docker_network:
         name: monitoring
         state: present
 
-    - name: Запустить Grafana в Docker
+    - name: Run Grafana in Docker
       docker_container:
         name: grafana
         image: grafana/grafana-oss:latest
@@ -43,7 +43,7 @@
         networks:
           - name: monitoring
 
-    - name: Запустить Prometheus в Docker
+    - name: Run Prometheus in Docker
       docker_container:
         name: prometheus
         image: prom/prometheus
@@ -56,12 +56,12 @@
         networks:
           - name: monitoring
 
-    - name: Копировать prometheus.yml
+    - name: Copy prometheus.yml
       copy:
         src: files/prometheus.yml
         dest: /opt/prometheus/prometheus.yml
 
-    - name: Добавить Prometheus как источник данных в Grafana
+    - name: Add Prometheus as a data source in Grafana
       community.grafana.grafana_datasource:
         name: Prometheus
         ds_type: prometheus
@@ -73,7 +73,7 @@
         grafana_user: admin
         grafana_password: admin
 
-    - name: Запустить Node Exporter в Docker
+    - name: Run Node Exporter in Docker
       docker_container:
         name: node_exporter
         image: prom/node-exporter
@@ -84,12 +84,12 @@
         networks:
           - name: monitoring
 
-    - name: Скопировать файл дашборда на удалённую VM
+    - name: Copy the dashboard file to the remote VM
       copy:
         src: files/sample-dashboard.json
         dest: /tmp/sample-dashboard.json
 
-    - name: Добавить Node Exporter Full Dashboard в Grafana
+    - name: Add Node Exporter Full Dashboard in Grafana
       community.grafana.grafana_dashboard:
         grafana_url: "http://{{ host_ip }}:3000"
         grafana_user: admin

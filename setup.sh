@@ -1,32 +1,32 @@
 #!/bin/bash
 
-set -e  # если любая команда падает — скрипт остановится
+set -e  # If any command fails, the script will stop
 
 TERRAFORM_DIR="terraform"
 
-echo "Переходим в директорию $TERRAFORM_DIR..."
+echo "Navigate to the directory $TERRAFORM_DIR..."
 cd "$TERRAFORM_DIR"
 
-echo "Запускаем Terraform..."
+echo "Run Terraform..."
 terraform init
 terraform apply -auto-approve
 
-echo "Получаем внешний IP из Terraform output..."
+echo "Getting  external IP from Terraform output..."
 IP=$(terraform output -raw vm_ip)
-echo "Внешний IP: $IP"
+echo "External IP: $IP"
 
 cd ..
 
-echo "Создаём inventory.ini для Ansible..."
+echo "Create inventory.ini for Ansible..."
 cat > inventory.ini <<EOF
 [devops]
 $IP ansible_user=devops ansible_ssh_private_key_file=~/.ssh/id_rsa
 EOF
 
-echo "Ожидание запуска VM (30 секунд)..."
+echo "Waiting when VM is started (30 second)..."
 sleep 30
 
-echo "Запускаем Ansible Playbook..."
+echo "Starting Ansible Playbook..."
 ansible-playbook -i inventory.ini ansible/playbook.yml --extra-vars "host_ip=$IP"
 
-echo "Готово! Сервер $IP настроен и готов к деплою"
+echo "Done! Server $IP is configured and ready for deployment"
