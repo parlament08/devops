@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello from Flask in Docker on GCP!"
+    return "Hello from Flask in Docker on GCP!!!"
 
 
 if __name__ == '__main__':
