@@ -4,7 +4,7 @@ pipeline {
 
   environment {
     DOCKER_IMAGE = 'flask-app:latest'
-    REMOTE_HOST = '136.114.184.9'
+    REMOTE_HOST = '35.192.111.248'
     REMOTE_USER = 'devops'
   }
 
